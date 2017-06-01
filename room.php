@@ -12,19 +12,15 @@
 	$listObject = '<table id="list">';
 	$listObject .= '<tr>';
 	$listObject .= '<th>Nombre</th>';
-	$listObject .= '<th>Fecha Inicio</th>';
-	$listObject .= '<th>Fecha Fin</th>';
 	$listObject .= '</tr>';
 
-	$sql = "select * from evento";
+	$sql = "select * from sala where disponible = 1";
 
 	$result = query($sql,1);
 	if($result->success){
 		foreach($result->result as $row){
 			$listObject .= '<tr>';
-			$listObject .= '<td><a href="detailEvent.php?idevento='.$row['idevento'].'">'.$row['nombre'].'</td></a>';
-			$listObject .= '<td>'.$row['fecha_inicio'].'</td>';
-			$listObject .= '<td>'.$row['fecha_fin'].'</td>';
+			$listObject .= '<td><a href="detailRoom.php?idsala='.$row['idsala'].'">'.$row['nombre'].'</td></a>';
 			$listObject .= '</tr>';
 		}
 	}
@@ -35,14 +31,14 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="static/style.css">
-		<title>Eventos - Biblioteca</title>
+		<title>Salas - Biblioteca</title>
 	</head>
 	<body>
 		<nav>
 			<?php include 'static/header.php'; ?>
 		</nav>
 		<main>
-			<h2>Eventos</h2>
+			<h2>Salas</h2>
 			<label class="error"><?php echo $errorGeneral; ?></label><br>
 			<?php echo $listObject; ?>
 		</main>

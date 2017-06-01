@@ -16,75 +16,77 @@
 	if($_SERVER['REQUEST_METHOD'] == 'GET'){
 		$continue = true;
 		$nombre_usuario = filter($_GET['search']);
-		$type = filter($_GET['type']);
-		$sql = "select * from usuario where nombre_usuario = '$nombre_usuario'";
-		$result = query($sql,1);
-		if($result->success && $result->num_rows > 0){
-			$elementos = array();
-			$row = $result->result->fetch_assoc();
-			$idusuario = $row['idusuario'];
-			if($type == 'libro'){
-				$sql = "select u.nombre_usuario as nombre_usuario,s.idsolicitud as idsolicitud, s.idlibro as idobjeto from solicitud s, usuario u where u.idusuario = s.idusuario and u.idusuario = $idusuario and s.estado = 'aprobado' and s.estado_objeto <> 'devuelto' and s.idlibro IS NOT NULL";
-				$result2 = query($sql,1);
-				if($result2->success){
-					if($result2->num_rows > 0){
-						foreach ($result2->result as $libro) {
-							$idlibro = $libro['idobjeto'];
-							$sql2 = "select titulo from libro where idlibro = $idlibro";
-							$nombre = query($sql2,1);
-							if(!$nombre->success){
-								$errorGeneral = "Error general. ".$nombre->result.' '.$nombre->errno;
-								$continue = false;
-								break;
+		if(isset($_GET['search'])){
+			$type = filter($_GET['type']);
+			$sql = "select * from usuario where nombre_usuario = '$nombre_usuario'";
+			$result = query($sql,1);
+			if($result->success && $result->num_rows > 0){
+				$elementos = array();
+				$row = $result->result->fetch_assoc();
+				$idusuario = $row['idusuario'];
+				if($type == 'libro'){
+					$sql = "select u.nombre_usuario as nombre_usuario,s.idsolicitud as idsolicitud, s.idlibro as idobjeto from solicitud s, usuario u where u.idusuario = s.idusuario and u.idusuario = $idusuario and s.estado = 'aprobado' and s.estado_objeto <> 'devuelto' and s.idlibro IS NOT NULL";
+					$result2 = query($sql,1);
+					if($result2->success){
+						if($result2->num_rows > 0){
+							foreach ($result2->result as $libro) {
+								$idlibro = $libro['idobjeto'];
+								$sql2 = "select titulo from libro where idlibro = $idlibro";
+								$nombre = query($sql2,1);
+								if(!$nombre->success){
+									$errorGeneral = "Error general. ".$nombre->result.' '.$nombre->errno;
+									$continue = false;
+									break;
+								}
+								$nombre = $nombre->result->fetch_assoc();
+								$item = new ObjectReport();
+								$item->nombre = $nombre['titulo'];
+								$item->idsolicitud = $libro['idsolicitud'];
+								array_push($elementos,$item);
 							}
-							$nombre = $nombre->result->fetch_assoc();
-							$item = new ObjectReport();
-							$item->nombre = $nombre['titulo'];
-							$item->idsolicitud = $libro['idsolicitud'];
-							array_push($elementos,$item);
+						}else{
+							$formReport = 'No hay elementos asociados a este usuario.';
+							$continue = false;
 						}
 					}else{
-						$formReport = 'No hay elementos asociados a este usuario.';
+						$errorGeneral = "Error general. ".$result2->result.' '.$result2->errno;
 						$continue = false;
 					}
 				}else{
-					$errorGeneral = "Error general. ".$result2->result.' '.$result2->errno;
-					$continue = false;
-				}
-			}else{
-				$sql = "select u.nombre_usuario as nombre_usuario,s.idsolicitud as idsolicitud, s.idequipo as idobjeto from solicitud s, usuario u where u.idusuario = s.idusuario and u.idusuario = $idusuario and s.estado = 'aprobado' and s.estado_objeto <> 'devuelto' and s.idequipo IS NOT NULL";
-				$result2 = query($sql,1);
-				if($result2->success){
-					if($result2->num_rows > 0){
-						foreach ($result2->result as $equipo) {
-							$idequipo = $equipo['idobjeto'];
-							$sql2 = "select nombre from equipo where idequipo = $idequipo";
-							$nombre = query($sql2,1);
-							if(!$nombre->success){
-								$errorGeneral = "Error general. ".$nombre->result.' '.$nombre->errno;
-								$continue = false;
-								break;
+					$sql = "select u.nombre_usuario as nombre_usuario,s.idsolicitud as idsolicitud, s.idequipo as idobjeto from solicitud s, usuario u where u.idusuario = s.idusuario and u.idusuario = $idusuario and s.estado = 'aprobado' and s.estado_objeto <> 'devuelto' and s.idequipo IS NOT NULL";
+					$result2 = query($sql,1);
+					if($result2->success){
+						if($result2->num_rows > 0){
+							foreach ($result2->result as $equipo) {
+								$idequipo = $equipo['idobjeto'];
+								$sql2 = "select nombre from equipo where idequipo = $idequipo";
+								$nombre = query($sql2,1);
+								if(!$nombre->success){
+									$errorGeneral = "Error general. ".$nombre->result.' '.$nombre->errno;
+									$continue = false;
+									break;
+								}
+								$nombre = $nombre->result->fetch_assoc();
+								$item = new ObjectReport();
+								$item->nombre = $nombre['nombre'];
+								$item->idsolicitud = $equipo['idsolicitud'];
+								array_push($elementos,$item);
 							}
-							$nombre = $nombre->result->fetch_assoc();
-							$item = new ObjectReport();
-							$item->nombre = $nombre['nombre'];
-							$item->idsolicitud = $equipo['idsolicitud'];
-							array_push($elementos,$item);
+						}else{
+							$formReport = 'No hay elementos asociados a este usuario.';
+							$continue = false;
 						}
 					}else{
-						$formReport = 'No hay elementos asociados a este usuario.';
+						$errorGeneral = "Error general. ".$result2->result.' '.$result2->errno;
 						$continue = false;
 					}
-				}else{
-					$errorGeneral = "Error general. ".$result2->result.' '.$result2->errno;
-					$continue = false;
 				}
-			}
 
-			if($continue)
-				fillFormReport($elementos,$nombre_usuario);
-		}else{
-			$errorGeneral = "Usuario no encontrado.";
+				if($continue)
+					fillFormReport($elementos,$nombre_usuario);
+			}else{
+				$errorGeneral = "Usuario no encontrado.";
+			}
 		}
 	}
 
@@ -177,7 +179,7 @@
 					<option value="libro">Libro</option>
 					<option value="equipo">Equipo</option>
 				</select>
-				<input type="submit" name="submit" value="Buscar" />
+				<input type="submit" value="Buscar" />
 			</form>
 
 			<?php echo $formReport; ?>

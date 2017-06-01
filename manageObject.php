@@ -241,6 +241,7 @@
 			</form>
 
 			<h2>Lista de <?php echo $type.'s'; ?> </h2>
+			<label class="error"><?php echo $errorGeneralTable; ?></label><br>
 			<?php echo $listObject; ?>
 		</main>
 	</body>

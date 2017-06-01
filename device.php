@@ -27,7 +27,9 @@
 					$errorGeneral = "Error general. ".$result2->result.' '.$result2->errno;
 					break;
 				}
-				$listObject .= '<label>Se encontrara disponible en: '.$fecha_vencimiento.'</label><br><br>';
+				$date = strtotime($fecha_vencimiento);
+				$date = date("d/m/Y",$date);
+				$listObject .= '<label>Se encontrara disponible en: '.$date.'</label><br><br>';
 				$listObject .= '<button disabled>Solicitar</button>';
 			}else{
 				$listObject .= '<label>Disponibles: '.$row['disponibles'].'</label><br><br>';

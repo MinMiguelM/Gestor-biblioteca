@@ -23,15 +23,16 @@ create table equipo(
 
 create table sala(
 	idsala int primary key auto_increment,
-	nombre varchar(50)
+	nombre varchar(50),
+	disponible bit default 1
 );
 
 create table evento(
 	idevento int primary key auto_increment,
 	idsala int null,
-	fecha datetime,
+	fecha_inicio datetime,
+	fecha_fin datetime,
 	nombre varchar(50),
-	hora varchar(50),
 	lugar varchar(100),
 	foreign key (idsala) references sala(idsala) on delete cascade
 );

@@ -50,21 +50,15 @@
 				$image = $_FILES['image']['name'];
 				$sql = "insert into equipo (nombre,fabricante,num_serie,imagen,total,disponibles) values ('$nombre','$fabricante','$num_serie','$image','$cantidad','$cantidad')";
 
-				/*$error = false;
-				for($i = 1;$i <= $cantidad;$i++){
-					$resultInsert = query($sql,2);
-					if(!$resultInsert->success){
-						$error = true;
-						break;
-					}
-				}*/
-
 				$resultInsert = query($sql,2);
 				if(!$resultInsert->success){
 					$errorGeneralForm = "Error en la creacion.".$resultInsert->result;
 				}else{
 					$target_dir = "files/";
 					$target_file = $target_dir . basename($image);
+					if (!file_exists('files/')) {
+						mkdir('files/',0777,true);
+					}
 					move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
 					messageAlert("$type creado");
 					tableDevice();
@@ -96,21 +90,15 @@
 				$image = $_FILES['image']['name'];
 				$sql = "insert into libro (titulo,autor,edicion,editorial,paginas,isbn,imagen,total,disponibles) values ('$nombre','$autor','$edicion','$editorial','$paginas','$isbn','$image','$cantidad','$cantidad')";
 
-				/*$error = false;
-				for($i = 1;$i <= $cantidad;$i++){
-					$resultInsert = query($sql,2);
-					if(!$resultInsert->success){
-						$error = true;
-						break;
-					}
-				}*/
-
 				$resultInsert = query($sql,2);
 				if(!$resultInsert->success){
 					$errorGeneralForm = "Error en la creacion.".$resultInsert->result;
 				}else{
 					$target_dir = "files/";
 					$target_file = $target_dir . basename($image);
+					if (!file_exists('files/')) {
+						mkdir('files/',0777,true);
+					}
 					move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
 					messageAlert("$type creado");
 					tableBook();
@@ -253,6 +241,7 @@
 			</form>
 
 			<h2>Lista de <?php echo $type.'s'; ?> </h2>
+			<label class="error"><?php echo $errorGeneralTable; ?></label><br>
 			<?php echo $listObject; ?>
 		</main>
 	</body>

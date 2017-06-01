@@ -26,7 +26,11 @@
 				<div class="flex-item"><a href="manageObject.php"><strong>Creacion libros/equipos</strong></a></div>
 			  	<div class="flex-item"><a href="report.php"><strong>Reportes</strong></a></div>
 			  	<div class="flex-item"><a href="manageRequest.php"><strong>Centro de mensajes</strong></a></div>  
+			</div>
+			<div class="flex-container">
 			  	<div class="flex-item"><a href="manageEvent.php"><strong>Creacion eventos</strong></a></div>  
+			  	<div class="flex-item"><a href="manageRoom.php"><strong>Creacion salas</strong></a></div>  
+			  	<div class="flex-item"></div> 
 			</div>
 		</main>
 	</body>

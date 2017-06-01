@@ -59,11 +59,11 @@
 		if($_POST['submit'] == 'Aprobar'){
 			if(empty($_POST['fecha_final'])){
 				$continue = false;
-				$errorGeneral = "Es necesario llnar todos los campos.";
+				$errorGeneral = "Es necesario llenar todos los campos.";
 			}
 			if(empty($_POST['report'])){
 				$continue = false;
-				$errorGeneral = "Es necesario llnar todos los campos.";
+				$errorGeneral = "Es necesario llenar todos los campos.";
 			}
 			if($continue){
 				$fecha_inicial = $_POST['fecha_inicio'];
@@ -77,7 +77,7 @@
 						$sql2 = "update equipo set disponibles = disponibles - 1 where idequipo = $idobjeto and disponibles > 0";
 						break;
 					case 2:
-						$sql2 = "update sala set disponibles = disponibles - 1 where idsala = $idobjeto and disponibles > 0";
+						$sql2 = "update sala set disponible = 0 where idsala = $idobjeto and disponible = 1";
 						break;
 					case 3:
 						$sql2 = "update libro set disponibles = disponibles - 1 where idlibro = $idobjeto and disponibles > 0";
@@ -96,7 +96,7 @@
 					}
 				}else{
 					if($result2->num_rows == 0)
-						$errorGeneral = "No hay copias disponibles para este elemento. ";
+						$errorGeneral = "No hay disponibilidad para este elemento. ";
 					else
 						$errorGeneral = "Error general. ".$result2->result.' '.$result2->errno;
 				}

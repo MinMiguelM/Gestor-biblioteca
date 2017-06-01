@@ -10,7 +10,7 @@
 	$errorGeneral = '';
 	if($_SERVER['REQUEST_METHOD'] == 'GET'){
 		if(!isset($_GET['idevento'])){
-			header("Location: manageRequest.php");
+			header("Location: event.php");
     		exit();
 		}else{
 			$idevento = $_GET['idevento'];
@@ -19,8 +19,16 @@
 			if($result->success){
 				$row = $result->result->fetch_assoc();
 				$nombre=$row['nombre'];
-				$lugar=$row['lugar'];
-				$fecha=$row['fecha'];
+				if($row['idsala'] == null)
+					$lugar=$row['lugar'];
+				else{
+					$idsala = $row['idsala'];
+					$sqlLugar = "select * from sala where idsala = $idsala";
+					$resultSala = query($sqlLugar,1);
+					$lugar=$resultSala->result->fetch_assoc()['nombre'];
+				}
+				$fecha_inicio=$row['fecha_inicio'];
+				$fecha_fin=$row['fecha_fin'];
 				$idevento = $row['idevento'];
 			}else{
 				$errorGeneral = 'Error general. '.$result->result.' '.$result->errno;
@@ -59,8 +67,11 @@
 				<label for="nombre">Nombre: </label>
 				<input type="text" readonly="true" name="nombre" value = "<?php if (isset($_POST['nombre'])) echo htmlspecialchars($_POST['nombre']); else echo $nombre; ?>" /><br>
 
-				<label for="fecha">Fecha: </label>
-				<input type="text" readonly="true" name="fecha" value = "<?php if (isset($_POST['fecha'])) echo htmlspecialchars($_POST['fecha']); else echo $fecha; ?>" /><br>
+				<label for="fecha_inicio">Fecha inicio: </label>
+				<input type="text" readonly="true" name="fecha_inicio" value = "<?php if (isset($_POST['fecha_inicio'])) echo htmlspecialchars($_POST['fecha_inicio']); else echo $fecha_inicio; ?>" /><br>
+
+				<label for="fecha_fin">Fecha fin: </label>
+				<input type="text" readonly="true" name="fecha_fin" value = "<?php if (isset($_POST['fecha_fin'])) echo htmlspecialchars($_POST['fecha_fin']); else echo $fecha_fin; ?>" /><br>
 
 				<label for="lugar">Lugar: </label>
 				<input type="text" readonly="true" name="lugar" value = "<?php if (isset($_POST['lugar'])) echo htmlspecialchars($_POST['lugar']); else echo $lugar; ?>" /><br>

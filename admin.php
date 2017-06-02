@@ -30,7 +30,7 @@
 			<div class="flex-container">
 			  	<div class="flex-item"><a href="manageEvent.php"><strong>Creacion eventos</strong></a></div>  
 			  	<div class="flex-item"><a href="manageRoom.php"><strong>Creacion salas</strong></a></div>  
-			  	<div class="flex-item"><a href="manageSearch.php"><strong>Busqueda libros/equipos</stron></a></div> 
+			  	<div class="flex-item"></div> 
 			</div>
 		</main>
 	</body>

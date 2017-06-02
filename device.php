@@ -53,6 +53,7 @@
 		</nav>
 		<main>
 			<h2>Equipos</h2>
+			<a href="manageSearch.php">Busqueda avanzada</a>
 			<label class="error"><?php echo $errorGeneral; ?></label><br>
 			<?php echo $listObject; ?>
 		</main>
